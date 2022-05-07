@@ -1,0 +1,33 @@
+﻿  Building 'Driver' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
+  Stamping x64\Debug\Driver.inf
+  Stamping [Version] section with DriverVer=05/07/2022,10.45.27.632
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.inf(25-25): warning 2083: Section [standard.ntamd64.10.0...16299] not referenced or used.
+  Driver.c
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(14,40): warning C4459: declaration of 'DeviceObject' hides global declaration
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(14,40): warning C4100: 'DeviceObject': unreferenced formal parameter
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(54,40): warning C4459: declaration of 'DeviceObject' hides global declaration
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(76,41): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(80,41): warning C4267: '=': conversion from 'size_t' to 'ULONG', possible loss of data
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(54,40): warning C4100: 'DeviceObject': unreferenced formal parameter
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(64,8): warning C4189: 'InLength': local variable is initialized but not referenced
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(65,8): warning C4189: 'OutLength': local variable is initialized but not referenced
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(96,28): warning C4100: 'DriverObject': unreferenced formal parameter
+E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\Driver\Driver.c(104,67): warning C4100: 'RegistryPath': unreferenced formal parameter
+  Driver.vcxproj -> E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\x64\Debug\Driver.sys
+  Done Adding Additional Store
+  Successfully signed: E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\x64\Debug\Driver.sys
+  
+  ........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\x64\Debug\Driver\driver.cat
+  Done Adding Additional Store
+  Successfully signed: E:\WOA\Projects\Drivers\Windows-IOCTL-Driver\x64\Debug\Driver\driver.cat
+  
