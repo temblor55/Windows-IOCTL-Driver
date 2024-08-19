@@ -1,0 +1,28 @@
+﻿  Building 'Driver' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping ARM64\Debug\Driver.inf
+  Stamping [Version] section with DriverVer=05/07/2022,11.16.51.177
+E:\WOA\Projects\Drivers\Driver\Driver\Driver.inf(25-25): warning 2083: Section [standard.ntarm64.10.0...16299] not referenced or used.
+  Driver.c
+E:\WOA\Projects\Drivers\Driver\Driver\Driver.c(8,28): warning C4100: 'DriverObject': unreferenced formal parameter
+E:\WOA\Projects\Drivers\Driver\Driver\Driver.c(16,67): warning C4100: 'RegistryPath': unreferenced formal parameter
+  Generating code
+  Finished generating code
+  Driver.vcxproj -> E:\WOA\Projects\Drivers\Driver\ARM64\Debug\Driver.sys
+  Done Adding Additional Store
+  Successfully signed: E:\WOA\Projects\Drivers\Driver\ARM64\Debug\Driver.sys
+  
+  Driver is 'Universal'.
+  .........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  E:\WOA\Projects\Drivers\Driver\ARM64\Debug\Driver\driver.cat
+  Done Adding Additional Store
+  Successfully signed: E:\WOA\Projects\Drivers\Driver\ARM64\Debug\Driver\driver.cat
+  
