@@ -4,15 +4,15 @@ UNICODE_STRING DeviceName = RTL_CONSTANT_STRING(L"\\Device\\mydevice123");
 UNICODE_STRING SyLinkName = RTL_CONSTANT_STRING(L"\\??\\mySyLink123");
 PDEVICE_OBJECT DeviceObject = NULL;
 
-NTSTATUS DispatchPassThru(PDEVICE_OBJECT DeviceObject, PIRP Irp)
+NTSTATUS DriverDispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
 	// Get irp stack location
-	PIO_STACK_LOCATION irpsp = IoGetCurrentIrpStackLocation(Irp);
+	PIO_STACK_LOCATION irpSL = IoGetCurrentIrpStackLocation(Irp);
 
 	//retrive major fuction type of the irp depends on IO Stack location (irpsp)
-	switch (irpsp->MajorFunction)
+	switch (irpSL->MajorFunction)
 	{
 	case IRP_MJ_CREATE:
 		KdPrint(("create request \n"));
@@ -25,11 +25,18 @@ NTSTATUS DispatchPassThru(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		KdPrint(("read request \n"));
 		break;
 
+    case IRP_MJ_WRITE:
+	    KdPrint(("write request \n"));
+	    break;
+
 	default:
 		break;
 	}
 
-
+	// finish irp
+	Irp->IoStatus.Information = 0; // how many bytes we read or write
+	Irp->IoStatus.Status = status; // success status to indicate that we successfully compelete this request
+	IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
 	return status;
 }
@@ -75,7 +82,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
 	for (int i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
 	{
 
-		DriverObject->MajorFunction[i] = DispatchPassThru;
+		DriverObject->MajorFunction[i] = DriverDispatch;
 
 
 	}
