@@ -16,10 +16,10 @@ NTSTATUS DriverDispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 	NTSTATUS status = STATUS_SUCCESS;
 
 	// Get irp stack location
-	PIO_STACK_LOCATION irpSL = IoGetCurrentIrpStackLocation(Irp);
+	PIO_STACK_LOCATION irpsp = IoGetCurrentIrpStackLocation(Irp);
 
 	//retrive major fuction type of the irp depends on IO Stack location (irpsp)
-	switch (irpSL->MajorFunction)
+	switch (irpsp->MajorFunction)
 	{
 	case IRP_MJ_CREATE:
 		KdPrint(("create request \n"));
@@ -43,7 +43,9 @@ NTSTATUS DriverDispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		break;
 	}
 
-	// finish irp
+	//
+	// Finish irp
+	//
 	Irp->IoStatus.Information = 0; // how many bytes we read or write
 	Irp->IoStatus.Status = status; // success status to indicate that we successfully compelete this request
 	IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -51,18 +53,19 @@ NTSTATUS DriverDispatch(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 	return status;
 }
 
-NTSTATUS DispatchDevCTL(PDEVICE_OBJECT DeviceObject, PIRP Irp)
+NTSTATUS IoDeviceControl(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 {
 	// get irp stack location
-	PIO_STACK_LOCATION irpsl = IoGetCurrentIrpStackLocation(Irp);
+	//pointer to current stack location
+	PIO_STACK_LOCATION irpsp = IoGetCurrentIrpStackLocation(Irp);
 	NTSTATUS status = STATUS_SUCCESS;
 
 	// retrive system buffer because ioctl using method buffer
 	PVOID Buffer = Irp->AssociatedIrp.SystemBuffer;
 
 	// get the buffer length from irp stack location
-	ULONG InLength = irpsl->Parameters.DeviceIoControl.InputBufferLength;
-	ULONG OutLength = irpsl->Parameters.DeviceIoControl.OutputBufferLength;
+	ULONG InBufLength = irpsp->Parameters.DeviceIoControl.InputBufferLength;
+	ULONG OutBufLength = irpsp->Parameters.DeviceIoControl.OutputBufferLength;
 
 	//define return lenth
 	ULONG returnLength = 0;
@@ -70,7 +73,7 @@ NTSTATUS DispatchDevCTL(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 	WCHAR* data = L"data sent from driver";
 
 	// switch between read and recive pre-defined CTL_CODE
-	switch (irpsl->Parameters.DeviceIoControl.IoControlCode)
+	switch (irpsp->Parameters.DeviceIoControl.IoControlCode)
 	{
 	case DEVICE_SEND:
 		returnLength = (wcsnlen(Buffer, 511)) * 2;
@@ -84,7 +87,9 @@ NTSTATUS DispatchDevCTL(PDEVICE_OBJECT DeviceObject, PIRP Irp)
 		break;
 	}
 
-	// finish irp
+	//
+	// Finish irp
+	//
 	Irp->IoStatus.Information = returnLength; // how many bytes we read or write
 	Irp->IoStatus.Status = status; // success status to indicate that we successfully compelete this request
 	IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -131,46 +136,12 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DriverObject, PUNICODE_STRING RegistryPath)
 
 	for (int i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
 	{
-
 		DriverObject->MajorFunction[i] = DriverDispatch;
-
-
 	}
     
-	KdPrint(("WDM driver :: hello world \n"));
+	DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = IoDeviceControl;
 
+	KdPrint(("WDM driver :: hello world \n"));
 
 	return status;
 }
-
-
-//NTSTATUS
-//DriverEntry(
-//    _In_ PDRIVER_OBJECT     DriverObject,
-//    _In_ PUNICODE_STRING    RegistryPath
-//)
-//{
-//    // NTSTATUS variable to record success or failure
-//    NTSTATUS status = STATUS_SUCCESS;
-//
-//    // Allocate the driver configuration object
-//    WDF_DRIVER_CONFIG config;
-//
-//    // Print "Hello World" for DriverEntry
-//    KdPrintEx((DPFLTR_IHVDRIVER_ID, DPFLTR_INFO_LEVEL, "KmdfHelloWorld: DriverEntry\n"));
-//
-//    // Initialize the driver configuration object to register the
-//    // entry point for the EvtDeviceAdd callback, KmdfHelloWorldEvtDeviceAdd
-//    WDF_DRIVER_CONFIG_INIT(&config,
-//        KmdfHelloWorldEvtDeviceAdd
-//    );
-//
-//    // Finally, create the driver object
-//    status = WdfDriverCreate(DriverObject,
-//        RegistryPath,
-//        WDF_NO_OBJECT_ATTRIBUTES,
-//        &config,
-//        WDF_NO_HANDLE
-//    );
-//    return status;
-//}
